@@ -59,7 +59,7 @@ public class CallRestAPI {
                     jobj = (JSONObject)jsonParser.parse(json);
 
                     Long count = (Long) jobj.get("count");
-                    System.out.println(count);
+                    System.out.println(count); //print for debug HTTP response.
 
                     // loop array
                     msg = (JSONArray) jobj.get("players");
