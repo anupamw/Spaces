@@ -11,6 +11,7 @@ public class App
 {
     public static void main( String[] args ) {
 
+
             System.out.println("Entry point.");
             PgConn pgC = new PgConn();
 
@@ -28,6 +29,7 @@ public class App
         }
 
 
+        CallRestAPI.getREST("http://api.football-data.org/v1/teams/66/players");
     }
 
 
