@@ -19,14 +19,19 @@ public class App
         Runnable getPlayers = new GetPlayers();
         Thread getPlayersThread = new Thread(getPlayers);
         getPlayersThread.start();
+
+        Runnable pullTwitter = new PullTwitter();
+        Thread pullTwitterThread = new Thread(pullTwitter);
+        pullTwitterThread.start();
+        //Runnable getYoutube = new GetYoutube();
+
+
         try {
             getPlayersThread.join();
+            pullTwitterThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //Runnable getTwitter = new GetTwitter();
-        //Runnable getYoutube = new GetYoutube();
-
         /*
             try {
 

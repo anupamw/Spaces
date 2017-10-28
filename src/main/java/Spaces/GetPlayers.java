@@ -32,7 +32,7 @@ public class GetPlayers implements Runnable {
 
         PgConn pgC = new PgConn();
         String urlstring = "http://api.football-data.org/v1/teams/66/players";
-        long sleepinterval = 30000; //30s
+        long sleepinterval = 3000000; //30s
 
         while (true) {
 
@@ -99,6 +99,8 @@ public class GetPlayers implements Runnable {
 
                                 dob = (String) jobj.get("dateOfBirth");
                                 System.out.println(dob);
+
+                                //TODO: fix DOB to convert to age and insert into PG
 
                                 try {
                                     sqlstring = "INSERT INTO PLAYERSTABLE (name, position, jersey, country) VALUES ('" + player +
