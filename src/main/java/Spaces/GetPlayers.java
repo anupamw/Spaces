@@ -21,18 +21,26 @@ import java.sql.SQLException;
 
 public class GetPlayers implements Runnable {
 
-        /*
-    private PgConn pgC;
+    private AllData allData;
 
-    public void GetPlayers(PgConn pgC) {
-        this.pgC = pgC;
+    public GetPlayers(AllData allData) {
+        this.allData = allData;
+
+        //Hardcode for Man U
+        Set<String> clubPlayers = new HashSet<String>();
+        ClubPlayers clubPlayersObject = new ClubPlayers();
+        clubPlayersObject.clubPlayers = clubPlayers;
+        allData.clubsSignings.putIfAbsent("Manchester United", clubPlayersObject);
     }
-*/
+
+
+
     public void run() {
 
-        PgConn pgC = new PgConn();
-        String urlstring = "http://api.football-data.org/v1/teams/66/players";
-        long sleepinterval = 3000000; //30s
+
+        String urlstring = "http://api.football-data.org/v1/teams/66/players"; //Man U hardcoded
+
+        long sleepinterval = 3000000; //300s
 
         while (true) {
 
@@ -66,10 +74,10 @@ public class GetPlayers implements Runnable {
 
                 jsonParser = new JSONParser();
 
-                System.out.println("Output from Server .... \n");
+                System.out.println("Fetched Player information .... \n");
                 while ((output = br.readLine()) != null) {
-                    System.out.println(output);
-                    System.out.println();
+                    //System.out.println(output);
+                    //System.out.println();
 
 
                     try {
@@ -79,6 +87,9 @@ public class GetPlayers implements Runnable {
                         Long count = (Long) jobj.get("count");
                         System.out.println(count); //print for debug HTTP response.
 
+
+
+
                         // loop array
                         msg = (JSONArray) jobj.get("players");
                         Iterator<JSONObject> iterator = msg.iterator();
@@ -86,33 +97,48 @@ public class GetPlayers implements Runnable {
                             while (iterator.hasNext()) {
                                 jobj = (JSONObject) iterator.next();
                                 player = (String) jobj.get("name");
-                                System.out.println(player);
+                                //System.out.println(player);
 
                                 position = (String) jobj.get("position");
-                                System.out.println(position);
+                                //System.out.println(position);
 
                                 jersey = (Long) jobj.get("jerseyNumber");
-                                System.out.println(jersey);
+                                //System.out.println(jersey);
 
                                 country = (String) jobj.get("nationality");
-                                System.out.println(country);
+                                //System.out.println(country);
 
                                 dob = (String) jobj.get("dateOfBirth");
-                                System.out.println(dob);
+                                //System.out.println(dob);
 
                                 //TODO: fix DOB to convert to age and insert into PG
-
+                                /*
                                 try {
                                     sqlstring = "INSERT INTO PLAYERSTABLE (name, position, jersey, country) VALUES ('" + player +
                                             "', '" + position + "', " + jersey +  ", '" + country + "');";
-                                    System.out.println(sqlstring);
-                                    pgC.insertRecordsIntoTable(sqlstring);
+                                    //System.out.println(sqlstring);
+                                    allData.pgC.insertRecordsIntoTable(sqlstring);
 
                                     //pgC.selectRecordsFromTable("SELECT * FROM PLAYERS;");
 
                                 } catch (SQLException e) {
+
                                     e.printStackTrace();
                                 }
+                                */
+
+                                //Now load in AllData memory store
+                                PlayerInfo playerInfo = new PlayerInfo();
+                                playerInfo.name = player;
+                                playerInfo.country = country;
+                                playerInfo.jersey = jersey;
+                                playerInfo.dob = dob;
+                                playerInfo.position = position;
+
+                                allData.playerDetails.replace(player, playerInfo);
+                                allData.clubsSignings.get("Manchester United").clubPlayers.add(player);
+
+
                             }
 
                     } catch (ParseException e) {
@@ -137,6 +163,7 @@ public class GetPlayers implements Runnable {
 
             }
 
+            allData.DumpAllData();
             try {
                 Thread.sleep(sleepinterval); // go fetch again after sleepinterval
             } catch (InterruptedException e) {

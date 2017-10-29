@@ -34,11 +34,20 @@ public void GetPlayers(PgConn pgC) {
     this.pgC = pgC;
 }
 */
+
+    private AllData allData;
+
+    public PullTwitter(AllData allData) {
+        this.allData = allData;
+
+    }
+
+
     public void run() {
 
         //PgConn pgC = new PgConn();
         //String urlstring = "http://api.football-data.org/v1/teams/66/players";
-        long sleepinterval = 300000; //30s
+        long sleepinterval = 30000; //30s
 
         while (true) {
             Twitter twitter = new TwitterFactory().getInstance();
@@ -49,14 +58,39 @@ public void GetPlayers(PgConn pgC) {
                     "RI4Ixt3yUvQw7PeOg1opL1bBZ9XNdd4iS6XSqiXXm4Oan"));
 
             try {
+                /*
                 // Getting Twitter Timeline using Twitter4j API
                 //ResponseList statusReponseList = twitter.getUserTimeline(new Paging(1, 5));
                 List<Status> statusReponseList = twitter.getUserTimeline(new Paging(1, 5));
                 for (twitter4j.Status status : statusReponseList) {
                     System.out.println(status.getText());
                 }
-
+                */
                 //Twitter twitter = TwitterFactory.getSingleton();
+
+                Set set = allData.clubsSignings.entrySet();
+                Iterator iterator = set.iterator();
+                while(iterator.hasNext()) {
+                    Map.Entry mentry = (Map.Entry)iterator.next();
+                    //System.out.print("key is: "+ mentry.getKey() + " & Value is: ");
+                    System.out.print("Tweets from: "+ mentry.getKey());
+                    //System.out.println(mentry.getValue());
+                    //System.out.println(mentry.getKey() + "Players:");
+                    ClubPlayers roster = (ClubPlayers) mentry.getValue();
+                    Set<String> rosterPlayers = roster.clubPlayers;
+                    //System.out.println(rosterPlayers);
+                    Iterator<String> it = rosterPlayers.iterator();
+                    while(it.hasNext()){
+                        System.out.println(it.next());
+
+                        Query query = new Query(it.next());
+                        QueryResult result = twitter.search(query);
+                        for (Status status : result.getTweets()) {
+                            System.out.println("@" + status.getUser().getScreenName() + ":" + status.getText());
+                        }
+                    }
+                }
+                /*
                 Query query = new Query("Paul Pogba");
                 QueryResult result = twitter.search(query);
                 for (Status status : result.getTweets()) {
@@ -64,6 +98,7 @@ public void GetPlayers(PgConn pgC) {
                 }
 
                 System.out.println("Got something from (T)witter");
+                */
 
             } catch (Exception e) {
             }

@@ -9,6 +9,8 @@ package Spaces;
  */
 public class App 
 {
+
+
     public static void main( String[] args ) {
 
 
@@ -16,11 +18,14 @@ public class App
         System.out.println("Entry point.");
         //
 
-        Runnable getPlayers = new GetPlayers();
+        AllData allData = new AllData();
+        allData.pgC = new PgConn();
+
+        Runnable getPlayers = new GetPlayers(allData);
         Thread getPlayersThread = new Thread(getPlayers);
         getPlayersThread.start();
 
-        Runnable pullTwitter = new PullTwitter();
+        Runnable pullTwitter = new PullTwitter(allData);
         Thread pullTwitterThread = new Thread(pullTwitter);
         pullTwitterThread.start();
         //Runnable getYoutube = new GetYoutube();
