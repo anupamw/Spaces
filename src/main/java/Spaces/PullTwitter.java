@@ -27,13 +27,8 @@ import java.util.*;
 
 public class PullTwitter implements Runnable {
 
-    /*
-private PgConn pgC;
 
-public void GetPlayers(PgConn pgC) {
-    this.pgC = pgC;
-}
-*/
+    //Do a REST on Twitter to pull the first batch of tweets. Then rely on Stream API.
 
     private AllData allData;
 
@@ -49,7 +44,14 @@ public void GetPlayers(PgConn pgC) {
         //String urlstring = "http://api.football-data.org/v1/teams/66/players";
         long sleepinterval = 30000; //30s
 
-        while (true) {
+        try {
+            Thread.sleep(sleepinterval); // go fetch again after sleepinterval
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        //while (true) {
             Twitter twitter = new TwitterFactory().getInstance();
             // Twitter Consumer key & Consumer Secret
             twitter.setOAuthConsumer("fbRnO97AjQaHa7PIff1CIhjjG", "pHN0yxaFLcS5djvNTSL4VMv2iGaDSjDMeYwVMzZ5E8wwoGev9y");
@@ -103,12 +105,13 @@ public void GetPlayers(PgConn pgC) {
             } catch (Exception e) {
             }
 
+
             try {
                 Thread.sleep(sleepinterval); // go fetch again after sleepinterval
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        //}
     }
 
 }

@@ -25,15 +25,27 @@ public class App
         Thread getPlayersThread = new Thread(getPlayers);
         getPlayersThread.start();
 
+
         Runnable pullTwitter = new PullTwitter(allData);
         Thread pullTwitterThread = new Thread(pullTwitter);
         pullTwitterThread.start();
         //Runnable getYoutube = new GetYoutube();
 
+        try {
+            pullTwitterThread.join(); // Stream tweets only after REST call to twitter for initial tweets is complete
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Stream tweets only after REST call to twitter for initial tweets is complete
+        Runnable streamTwitter = new StreamTwitter(allData);
+        Thread streamTwitterThread = new Thread(streamTwitter);
+        streamTwitterThread.start();
+
 
         try {
             getPlayersThread.join();
-            pullTwitterThread.join();
+            //pullTwitterThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
