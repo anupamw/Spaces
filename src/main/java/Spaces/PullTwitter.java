@@ -54,10 +54,9 @@ public class PullTwitter implements Runnable {
         //while (true) {
             Twitter twitter = new TwitterFactory().getInstance();
             // Twitter Consumer key & Consumer Secret
-            twitter.setOAuthConsumer("fbRnO97AjQaHa7PIff1CIhjjG", "pHN0yxaFLcS5djvNTSL4VMv2iGaDSjDMeYwVMzZ5E8wwoGev9y");
+            twitter.setOAuthConsumer(allData.twitterAPIKey, allData.twitterAPISecret);
             // Twitter Access token & Access token Secret
-            twitter.setOAuthAccessToken(new AccessToken("17674248-WfNtcYK8mGlHpVsTB9oM6BRIYPU6lddvgxBuSSi2e",
-                    "RI4Ixt3yUvQw7PeOg1opL1bBZ9XNdd4iS6XSqiXXm4Oan"));
+            twitter.setOAuthAccessToken(new AccessToken(allData.twitterAccessToken, allData.twitterAccessSecret));
 
             try {
                 /*

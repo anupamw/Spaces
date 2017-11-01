@@ -1,5 +1,8 @@
 package Spaces;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 
 
@@ -20,6 +23,50 @@ public class App
 
         AllData allData = new AllData();
         allData.pgC = new PgConn();
+
+        System.out.println("Read api keys from file: api-keys.txt");
+        //Expecting a file called api-keys.txt in current dir of .jar that has each of these
+        // in 1 line each: twitterAPIKey, twitterAPISecret, twitterAccessToken, twitterAccessTockenSecret
+        BufferedReader br = null;
+        FileReader fr = null;
+
+        try {
+
+            //br = new BufferedReader(new FileReader(FILENAME));
+            fr = new FileReader("api-keys.txt");
+            br = new BufferedReader(fr);
+
+            String sCurrentLine;
+
+            if ((sCurrentLine = br.readLine()) != null) {
+                System.out.println(sCurrentLine);
+                allData.twitterAPIKey = sCurrentLine;
+            }
+            if ((sCurrentLine = br.readLine()) != null) {
+                System.out.println(sCurrentLine);
+                allData.twitterAPISecret = sCurrentLine;
+            }
+            if ((sCurrentLine = br.readLine()) != null) {
+                System.out.println(sCurrentLine);
+                allData.twitterAccessToken = sCurrentLine;
+            }
+            if ((sCurrentLine = br.readLine()) != null) {
+                System.out.println(sCurrentLine);
+                allData.twitterAccessSecret = sCurrentLine;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null)
+                    br.close();
+                if (fr != null)
+                    fr.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
 
         Runnable getPlayers = new GetPlayers(allData);
         Thread getPlayersThread = new Thread(getPlayers);

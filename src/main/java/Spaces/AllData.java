@@ -9,6 +9,11 @@ public class AllData {
     PgConn pgC;
     HashMap<String, ClubPlayers> clubsSignings; //Clubname gets a PlayerList (set)
     HashMap<String, PlayerInfo> playerDetails; //Playername gets a player-meta-object (object)
+    String twitterAPIKey;
+    String twitterAPISecret;
+    String twitterAccessToken;
+    String twitterAccessSecret;
+
 
     public AllData() {
         clubsSignings = new HashMap<String, ClubPlayers>();
