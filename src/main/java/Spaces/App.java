@@ -23,6 +23,9 @@ public class App
 
         AllData allData = new AllData();
         allData.pgC = new PgConn();
+        System.out.println("Opened PG connection");
+        allData.jC = new JedisConn();
+        System.out.println("Opened connection pool to REDIS");
 
         System.out.println("Read api keys from file: api-keys.txt");
         //Expecting a file called api-keys.txt in current dir of .jar that has each of these
@@ -71,6 +74,8 @@ public class App
         Runnable getPlayers = new GetPlayers(allData);
         Thread getPlayersThread = new Thread(getPlayers);
         getPlayersThread.start();
+        System.out.println("Updated Player database (not re-inserting to PG for now");
+        //Todo: Change to insert into PG only on changes
 
 
         Runnable pullTwitter = new PullTwitter(allData);
@@ -80,11 +85,13 @@ public class App
 
         try {
             pullTwitterThread.join(); // Stream tweets only after REST call to twitter for initial tweets is complete
+            System.out.println("Pulled initial set of tweets from players");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         // Stream tweets only after REST call to twitter for initial tweets is complete
+        System.out.println("Now tuning to stream of tweets ...");
         Runnable streamTwitter = new StreamTwitter(allData);
         Thread streamTwitterThread = new Thread(streamTwitter);
         streamTwitterThread.start();
@@ -92,7 +99,7 @@ public class App
 
         try {
             getPlayersThread.join();
-            //pullTwitterThread.join();
+            streamTwitterThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

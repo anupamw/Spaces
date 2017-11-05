@@ -40,7 +40,7 @@ public class GetPlayers implements Runnable {
 
         String urlstring = "http://api.football-data.org/v1/teams/66/players"; //Man U hardcoded
 
-        long sleepinterval = 3000000; //300s
+        long sleepinterval = 300000; //300s
 
         while (true) {
 
@@ -112,11 +112,15 @@ public class GetPlayers implements Runnable {
                                 //System.out.println(dob);
 
                                 //TODO: fix DOB to convert to age and insert into PG
-                                /*
+                                //This is for PG 9.5+
+                                // INSERT INTO PLAYERSTABLE (name, position, jersey, country) VALUES ('Juan Mata',
+                                // 'Attacking Midfield', 1000, 'Spain') ON CONFLICT (name) DO UPDATE SET jersey=1000;
+
                                 try {
                                     sqlstring = "INSERT INTO PLAYERSTABLE (name, position, jersey, country) VALUES ('" + player +
-                                            "', '" + position + "', " + jersey +  ", '" + country + "');";
-                                    //System.out.println(sqlstring);
+                                            "', '" + position + "', " + jersey +  ", '" + country + "') ON CONFLICT (name)" +
+                                            " DO UPDATE SET position = '" + position + "', jersey = " + jersey + ", country = '" + country +"';";
+                                    System.out.println(sqlstring);
                                     allData.pgC.insertRecordsIntoTable(sqlstring);
 
                                     //pgC.selectRecordsFromTable("SELECT * FROM PLAYERS;");
@@ -125,7 +129,9 @@ public class GetPlayers implements Runnable {
 
                                     e.printStackTrace();
                                 }
-                                */
+
+
+                                //Todo: No logic to delete players DELETE FROM PLAYERS where name = 'blah blah';
 
                                 //Now load in AllData memory store
                                 PlayerInfo playerInfo = new PlayerInfo();

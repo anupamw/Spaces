@@ -1,5 +1,6 @@
 package Spaces;
 import java.util.*;
+import redis.clients.jedis.Jedis;
 
 
 //Class that holds references to all data in our store
@@ -7,6 +8,7 @@ import java.util.*;
 public class AllData {
 
     PgConn pgC;
+    JedisConn jC;
     HashMap<String, ClubPlayers> clubsSignings; //Clubname gets a PlayerList (set)
     HashMap<String, PlayerInfo> playerDetails; //Playername gets a player-meta-object (object)
     String twitterAPIKey;
