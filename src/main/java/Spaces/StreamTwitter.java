@@ -30,9 +30,11 @@ public class StreamTwitter implements Runnable {
         StatusListener listener = new StatusListener() {
             @Override
             public void onStatus(Status status) {
-                System.out.println(status.getCreatedAt() + "/" + status.getLang() + "/" + status.getRetweetCount() +"/" + "@" + status.getUser().getScreenName() + " - " + status.getText());
+                if (status.isRetweet() == false) {
+                    System.out.println(status.getCreatedAt() + "/" + status.getLang() + "/IsRT?" + status.isRetweet() + "/" + "@" + status.getUser().getScreenName() + " - " + status.getText());
+                    insertIntoPlayerStream(status.getText());
+                }
             }
-
             @Override
             public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
                 System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
@@ -97,6 +99,18 @@ public class StreamTwitter implements Runnable {
         }
 
         //twitterStream.sample();
+    }
+
+    void insertIntoPlayerStream(String tweet) {
+        //Todo: this is missing a lot of matches. For example when tweet has only 1st name !
+        for (String player: allData.allPlayers) {
+            if (tweet.toLowerCase().contains(player.toLowerCase())) {
+                System.out.println("Ingest: " + player + " matched in this tweet!");
+                allData.jC.jedis.lpush(player.toLowerCase(), tweet);
+            }
+        }
+
+        return;
     }
 
     }

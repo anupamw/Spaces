@@ -42,7 +42,7 @@ public class GetPlayers implements Runnable {
 
         long sleepinterval = 300000; //300s
 
-        while (true) {
+        //while (true) {
 
 
             try {
@@ -170,12 +170,15 @@ public class GetPlayers implements Runnable {
             }
 
             allData.DumpAllData();
+            allData.buildAllPlayers();
+            /*
             try {
                 Thread.sleep(sleepinterval); // go fetch again after sleepinterval
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } // End of while(1) loop
+            */
+       // } // End of while(1) loop
 
     }
 }

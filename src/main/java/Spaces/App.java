@@ -78,14 +78,20 @@ public class App
         //Todo: Change to insert into PG only on changes
 
 
-        Runnable pullTwitter = new PullTwitter(allData);
-        Thread pullTwitterThread = new Thread(pullTwitter);
-        pullTwitterThread.start();
+        //Runnable pullTwitter = new PullTwitter(allData);
+        //Thread pullTwitterThread = new Thread(pullTwitter);
+        //pullTwitterThread.start();
         //Runnable getYoutube = new GetYoutube();
 
+        //try {
+            //pullTwitterThread.join(); // Stream tweets only after REST call to twitter for initial tweets is complete
+            //System.out.println("Pulled initial set of tweets from players");
+        //} catch (InterruptedException e) {
+        //    e.printStackTrace();
+        //}
+
         try {
-            pullTwitterThread.join(); // Stream tweets only after REST call to twitter for initial tweets is complete
-            System.out.println("Pulled initial set of tweets from players");
+            getPlayersThread.join(); //Todo: need to change to make this run and fetch infrequently for roster changes
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -98,7 +104,7 @@ public class App
 
 
         try {
-            getPlayersThread.join();
+            //getPlayersThread.join();
             streamTwitterThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
