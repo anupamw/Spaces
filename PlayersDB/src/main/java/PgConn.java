@@ -109,6 +109,53 @@ public class PgConn {
         }
     }
 
+    public String isEnabledRecordFromTable(String selectSQL) throws SQLException {
+
+        PreparedStatement preparedStatement = null;
+        String enabled="No";
+
+
+
+        try {
+            preparedStatement = connection.prepareStatement(selectSQL);
+
+            // execute select SQL stetement
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+
+                enabled = rs.getString("enable");
+                //String fclub = rs.getString("formerclub");
+                //String fclub = rs.getString("age");
+
+                System.out.println();
+                System.out.println("enabled : " + enabled);
+                //System.out.println("formerclub : " + fclub);
+
+                return enabled;
+
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println(e.getMessage());
+
+        } finally {
+
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+
+            /*
+            if (connection != null) {
+                connection.close();
+            }
+            */
+            return enabled;
+
+        }
+    }
+
     public void insertRecordsIntoTable(String selectSQL) throws SQLException {
 
         PreparedStatement preparedStatement = null;

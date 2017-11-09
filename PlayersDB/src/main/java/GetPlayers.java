@@ -34,7 +34,7 @@ public class GetPlayers implements Runnable {
     public void run() {
 
 
-        String urlstring = "http://api.football-data.org/v1/teams/66/players"; //Man U hardcoded
+        String urlstring = "http://api.football-data.org//v1/competitions"; //all competitions
 
         long sleepinterval = 300000; //300s
 
@@ -44,7 +44,7 @@ public class GetPlayers implements Runnable {
         try {
 
 
-            System.out.println("Use REST to fetch player info from: " + urlstring);
+            System.out.println("Use REST to fetch all competitions: " + urlstring);
             //URL url = new URL("http://api.football-data.org/v1/teams/66/players");
             URL url = new URL(urlstring);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -64,13 +64,16 @@ public class GetPlayers implements Runnable {
             JSONObject jobj;
             JSONParser jsonParser;
             JSONArray msg;
-            String player, position, country, dob;
+            String caption;
+            String league;
+            JSONObject links;
             String sqlstring;
-            Long jersey;
+            Long id;
+            String enabled;
 
             jsonParser = new JSONParser();
 
-            System.out.println("Fetched Player information .... \n");
+            System.out.println("Fetched competitions information .... \n");
             while ((output = br.readLine()) != null) {
                 //System.out.println(output);
                 //System.out.println();
@@ -78,43 +81,59 @@ public class GetPlayers implements Runnable {
 
                 try {
                     json = output.trim();
-                    jobj = (JSONObject) jsonParser.parse(json);
+                    //jobj = (JSONObject) jsonParser.parse(json);
 
-                    Long count = (Long) jobj.get("count");
-                    System.out.println(count); //print for debug HTTP response.
+                    //Long count = (Long) jobj.get("count");
+                    //System.out.println(count); //print for debug HTTP response.
 
 
 
 
                     // loop array
-                    msg = (JSONArray) jobj.get("players");
+                    msg = (JSONArray) jsonParser.parse(json);
                     Iterator<JSONObject> iterator = msg.iterator();
                     if (iterator != null)
                         while (iterator.hasNext()) {
                             jobj = (JSONObject) iterator.next();
-                            player = (String) jobj.get("name");
-                            //System.out.println(player);
 
-                            position = (String) jobj.get("position");
-                            //System.out.println(position);
+                            links = (JSONObject)  jobj.get("_links");
+                            System.out.println(links);
 
-                            jersey = (Long) jobj.get("jerseyNumber");
-                            //System.out.println(jersey);
+                            id = (Long) jobj.get("id");
+                            System.out.println(id);
 
-                            country = (String) jobj.get("nationality");
-                            //System.out.println(country);
+                            caption = (String) jobj.get("caption");
+                            System.out.println(caption);
 
-                            dob = (String) jobj.get("dateOfBirth");
-                            //System.out.println(dob);
+                            league = (String) jobj.get("league");
+                            System.out.println(league);
 
+                            try {
+                                sqlstring = "select enable from COMPTABLE where league = '" + league +"' and caption = '" +
+                                        caption + "' and enable = 'Yes'";
+                                System.out.println(sqlstring);
+                                enabled = allData.pgC.isEnabledRecordFromTable(sqlstring);
+                                System.out.println(enabled);
+
+                                if (enabled.compareToIgnoreCase("Yes") == 0)
+                                    fetchTeamsInComp(id, caption);
+
+
+                                //pgC.selectRecordsFromTable("SELECT * FROM PLAYERS;");
+
+                            } catch (SQLException e) {
+
+                                e.printStackTrace();
+                            }
+                            /*
                             //TODO: fix DOB to convert to age and insert into PG
                             //This is for PG 9.5+
                             // INSERT INTO PLAYERSTABLE (name, position, jersey, country) VALUES ('Juan Mata',
                             // 'Attacking Midfield', 1000, 'Spain') ON CONFLICT (name) DO UPDATE SET jersey=1000;
 
                             try {
-                                sqlstring = "INSERT INTO PLAYERSTABLE (name, position, jersey, country) VALUES ('" + player +
-                                        "', '" + position + "', " + jersey +  ", '" + country + "') ON CONFLICT (name)" +
+                                sqlstring = "INSERT INTO COMPTABLE (league, caption, id, enable) VALUES ('" + league +
+                                        "', '" + caption + "', " + id +  ", '" + country + "') ON CONFLICT (name)" +
                                         " DO UPDATE SET position = '" + position + "', jersey = " + jersey + ", country = '" + country +"';";
                                 System.out.println(sqlstring);
                                 allData.pgC.insertRecordsIntoTable(sqlstring);
@@ -126,7 +145,7 @@ public class GetPlayers implements Runnable {
                                 e.printStackTrace();
                             }
 
-
+                            */
                             //Todo: No logic to delete players DELETE FROM PLAYERS where name = 'blah blah';
 
                             //Now load in AllData memory store
@@ -176,5 +195,9 @@ public class GetPlayers implements Runnable {
             */
         // } // End of while(1) loop
 
+    }
+
+    private void fetchTeamsInComp(long teamid, String caption) {
+        System.out.println("Now looking at teams for id/caption:" + teamid + "/" + caption);
     }
 }
