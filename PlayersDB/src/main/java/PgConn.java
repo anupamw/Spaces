@@ -125,12 +125,11 @@ public class PgConn {
             while (rs.next()) {
 
                 enabled = rs.getString("enable");
-                //String fclub = rs.getString("formerclub");
-                //String fclub = rs.getString("age");
+
 
                 System.out.println();
                 System.out.println("enabled : " + enabled);
-                //System.out.println("formerclub : " + fclub);
+
 
                 return enabled;
 
