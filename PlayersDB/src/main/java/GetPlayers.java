@@ -249,7 +249,7 @@ public class GetPlayers implements Runnable {
                                 }
                             }
 
-                        
+
 
                             club = (String) jobj.get("name");
                             System.out.println(club);

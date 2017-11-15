@@ -66,7 +66,11 @@ public class StreamTwitter implements Runnable {
 
         FilterQuery filter = new FilterQuery();
         //String[] keywordsArray = { "WorldSeries" };
-        String[] keywordsArray = null;
+        String[] keywordsArray = new String[allData.allPlayers.size()];
+        System.out.println("keywordsArray filter size is " + allData.allPlayers.size() + " players.");
+        System.out.println("Adding following players to Twitter Stream API filter ....\n");
+        String name;
+        int i =0;
 
         Set set = allData.clubsSignings.entrySet();
         Iterator iterator = set.iterator();
@@ -79,12 +83,11 @@ public class StreamTwitter implements Runnable {
             Set<String> rosterPlayers = roster.clubPlayers;
             //System.out.println(rosterPlayers);
             Iterator<String> it = rosterPlayers.iterator();
-            int i =0;
-            String name = null;
-            keywordsArray = new String[rosterPlayers.size()];
+
+            name = null;
             while (it.hasNext()) {
                 name = it.next();
-                System.out.println(name);
+                //System.out.println(name + " adding at " + i);
                 keywordsArray[i++] = name;
             }
         }
@@ -93,6 +96,7 @@ public class StreamTwitter implements Runnable {
             filter.track(keywordsArray);
             System.out.println("Now installing Twitter Stream function");
             twitterStream.filter(filter);
+            //todo: just the name may be too wide. For example Pedro, Willian ...
         }
         else {
             System.out.println("Did not install Twitter Stream function due to null filter");

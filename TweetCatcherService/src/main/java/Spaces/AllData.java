@@ -1,6 +1,5 @@
 package Spaces;
 import java.util.*;
-import redis.clients.jedis.Jedis;
 
 
 //Class that holds references to all data in our store
@@ -28,6 +27,7 @@ public class AllData {
         //prints everything on the screen
         //First iterate for each club over its roster:
 
+        System.out.println("Dumping AllData");
         Set set = clubsSignings.entrySet();
         Iterator iterator = set.iterator();
         while(iterator.hasNext()) {

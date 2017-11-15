@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/1.iml" filepath="$PROJECT_DIR$/1.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlayersDB/PlayersDB.iml" filepath="$PROJECT_DIR$/PlayersDB/PlayersDB.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Spaces.iml" filepath="$PROJECT_DIR$/Spaces.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TweetCatcherService/TweetCatcherService.iml" filepath="$PROJECT_DIR$/TweetCatcherService/TweetCatcherService.iml" />
     </modules>
   </component>
 </project>

@@ -7,13 +7,16 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="PlayersDB" />
-        <module name="Spaces" />
+        <module name="TweetCatcherService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="1" target="1.5" />
       <module name="PlayersDB" target="1.5" />
       <module name="Spaces" target="1.5" />
+      <module name="Tweet" target="1.5" />
+      <module name="TweetCatcher" target="1.5" />
+      <module name="TweetCatcherService" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

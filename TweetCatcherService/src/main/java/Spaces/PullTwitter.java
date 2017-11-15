@@ -20,9 +20,13 @@ package Spaces;
 
         import java.sql.SQLException;
 */
+
 import twitter4j.*;
 import twitter4j.auth.AccessToken;
-import java.util.*;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 
 public class PullTwitter implements Runnable {
